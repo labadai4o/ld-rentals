@@ -114,10 +114,6 @@ Rented vehicles receive license plates in the format:
 
 ### v1.0.0
 - Initial version
-- Vehicle rental system
-- Support for different fuel systems
-- Modern UI interface
-- Prevention of multiple rentals
 
 ## 🤝 Support
 

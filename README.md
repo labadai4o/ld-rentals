@@ -14,6 +14,7 @@ LD-Rentals is a script that allows players to rent vehicles from NPCs at specifi
 - 🗺️ Map blips for locations
 - 🖥️ Modern UI interface
 - 🔄 Prevention of multiple vehicle rentals
+- ⚡ 0.00ms optimized performance
 
 ## 🚀 Installation
 

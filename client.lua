@@ -58,6 +58,22 @@ local function findFreeSpawnPoint(points)
 	return nil
 end
 
+-- Helper function to restore clipboard for all NPCs
+local function restoreClipboards()
+	for i, ped in pairs(spawnedPeds) do
+		if DoesEntityExist(ped) then
+			local loc = Config.Locations[i]
+			if loc and loc.npc and loc.npc.scenario then
+				if not IsPedUsingScenario(ped, loc.npc.scenario) then
+					ClearPedTasks(ped)
+					Wait(100)
+					TaskStartScenarioInPlace(ped, loc.npc.scenario, 0, true)
+				end
+			end
+		end
+	end
+end
+
 	local function openNui(locationIndex)
 	if nuiOpen then return end
 	nuiOpen = true
@@ -87,6 +103,13 @@ RegisterNUICallback('rentals:close', function(_, cb)
 	SetNuiFocus(false, false)
 	SendNUIMessage({ action = 'close' })
 	nuiOpen = false
+	
+	-- Restore clipboard for all NPCs after menu closes
+	CreateThread(function()
+		Wait(500) -- Small delay to ensure menu is fully closed
+		restoreClipboards()
+	end)
+	
 	cb(true)
 end)
 
@@ -168,6 +191,12 @@ RegisterNetEvent('ld-rentals:client:spawnApproved', function(model, label, spawn
 		SetNuiFocus(false, false)
 		SendNUIMessage({ action = 'close' })
 		nuiOpen = false
+		
+		-- Restore clipboard for all NPCs after successful rental
+		CreateThread(function()
+			Wait(500) -- Small delay to ensure menu is fully closed
+			restoreClipboards()
+		end)
 	end
 end)
 
@@ -230,10 +259,6 @@ local function spawnNpcAndTarget(index)
 				label = _U('target_label'),
 				icon = loc.targetIcon or 'fa-solid fa-car',
 				action = function()
-					-- Re-apply scenario if it was interrupted
-					if loc.npc.scenario and not IsPedUsingScenario(p, loc.npc.scenario) then
-						TaskStartScenarioInPlace(p, loc.npc.scenario, 0, true)
-					end
 					TriggerEvent('ld-rentals:client:openMenu', index)
 				end
 			}
@@ -300,16 +325,7 @@ end)
 -- Periodic check to ensure NPCs always have their clipboard
 CreateThread(function()
 	while true do
-		Wait(5000) -- Check every 5 seconds
-		for i, ped in pairs(spawnedPeds) do
-			if DoesEntityExist(ped) then
-				local loc = Config.Locations[i]
-				if loc and loc.npc and loc.npc.scenario then
-					if not IsPedUsingScenario(ped, loc.npc.scenario) then
-						TaskStartScenarioInPlace(ped, loc.npc.scenario, 0, true)
-					end
-				end
-			end
-		end
+		Wait(2000) -- Check every 2 seconds for better responsiveness
+		restoreClipboards()
 	end
 end)

@@ -29,19 +29,19 @@ LD-Rentals is a script that allows players to rent vehicles from NPCs at specifi
 -- Language setting: 'bg' for Bulgarian, 'en' for English
 Config.Language = 'bg'
 
--- Сметка за плащане: 'cash' или 'bank'
+-- Payment account: 'cash' or 'bank'
 Config.PaymentAccount = 'cash'
 
--- Fuel система за използване: 'ps-fuel', 'LegacyFuel', 'cdn-fuel'
+-- Fuel system to use: 'ps-fuel', 'LegacyFuel', 'cdn-fuel'
 Config.FuelSystem = 'cdn-fuel'
 
--- Гориво за наетите превозни средства (0-100)
+-- Fuel level for rented vehicles (0-100)
 Config.FuelLevel = 90
 
--- Notification система за използване: 'qb-core', 'okok'
+-- Notification system to use: 'qb-core', 'okok'
 Config.NotificationSystem = 'qb-core'
 
--- Активиране на поставяне на играча в наетото превозно средство
+-- Enable putting player in rented vehicle
 Config.PutInVehicle = false
 ```
 
